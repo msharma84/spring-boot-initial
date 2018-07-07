@@ -1,0 +1,12 @@
+package com.kinley;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringBootIntialApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootIntialApplication.class, args);
+	}
+}
