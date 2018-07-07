@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+
+   <property name="LOG_PATH" value="E:/Frameworks/ELK_Stack" />
+   <property name="JSON_FILE_PATH" value="E:/Frameworks/ELK_Stack" />
+   
+   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+ 	<property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %X{mdcData}%5p %logger{36} - %msg%n"/>
+ 	<property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}000 %5p ${PID:- } %X{mdcData}--- [%t] %-40.40logger{39} : %m%n%wex"/>
+ 	
+    <appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/server.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+               ${FILE_LOG_PATTERN}
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_PATH}/archived/server.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+	
+	<appender name="JSON_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${JSON_FILE_PATH}/json-log.json</File>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+        	<minIndex>1</minIndex>
+            <maxIndex>10</maxIndex>
+            <fileNamePattern>${JSON_FILE_PATH}/archived/json-log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+           <!--  <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy> -->
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy> 
+    </appender>
+    
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+       
+    <logger name="com.kinley" level="debug" additivity="false">
+        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="JSON_APPENDER" />
+    </logger>
+
+    <root level="info">
+    	<appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="JSON_APPENDER" />
+    </root>
+</configuration>
