@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kinley.model.JWTUser;
-import com.kinley.rest.SampleRestController;
 import com.kinley.security.JWTTokenGenerator;
 
 @RestController
@@ -27,5 +26,5 @@ public class TokenController {
 		logger.info("generating token for jwt...");
 		return tokenGenerator.generate(jwtUser);
 	}
-
+	
 }
